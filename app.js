@@ -401,6 +401,12 @@ function toggleTaskComplete(taskId) {
     renderBanner();
   }
 }
+function deleteTask(taskId) {
+  state.tasks = state.tasks.filter(t => t.id !== taskId);
+  saveState();
+  renderCalendar();
+  renderBanner();
+}
 
 function renderCalendar() {
   document.getElementById("cal-month-view").classList.toggle("hidden", calView !== "month");
@@ -538,20 +544,35 @@ function buildTaskItem(t, overdue) {
   const timeStr = t.due.slice(11,16);
   const dateStr = overdue ? ` · ${t.due.slice(5,10)}` : "";
   item.innerHTML = `
-    <div class="check-circle" data-complete="${t.id}"></div>
-    <div class="task-body" data-edit="${t.id}">
-      <div class="task-title">${escapeHtml(t.title)}</div>
-      <div class="task-meta">${timeStr}${dateStr} · ${t.priority}</div>
-    </div>
-    <span class="priority-dot ${t.priority}"></span>
-  `;
+  <div class="check-circle" data-complete="${t.id}"></div>
+
+  <div class="task-body" data-edit="${t.id}">
+    <div class="task-title">${escapeHtml(t.title)}</div>
+    <div class="task-meta">${timeStr}${dateStr} · ${t.priority}</div>
+  </div>
+
+  <span class="priority-dot ${t.priority}"></span>
+
+  <button class="icon-btn danger" data-delete-task="${t.id}" aria-label="Delete task">
+    🗑️
+  </button>
+`;
   item.querySelector("[data-complete]").addEventListener("click", (e) => {
-    e.stopPropagation();
-    toggleTaskComplete(t.id);
-  });
-  item.querySelector("[data-edit]").addEventListener("click", () => openTaskEdit(t.id));
-  return item;
-}
+  e.stopPropagation();
+  toggleTaskComplete(t.id);
+});
+
+item.querySelector("[data-edit]").addEventListener("click", () => openTaskEdit(t.id));
+
+item.querySelector("[data-delete-task]").addEventListener("click", (e) => {
+  e.stopPropagation();
+
+  if (confirm(`Delete "${t.title}"?`)) {
+    deleteTask(t.id);
+  }
+});
+
+return item;
 
 function isSameDay(a, b) {
   return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
