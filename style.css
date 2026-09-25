@@ -7,8 +7,8 @@
   --hot-pink: #ff2e93;
   --bubblegum: #ffb6d9;
   --cream: #fff6f2;
-  --wine: #6b2545;
-  --wine-soft: #9c5876;
+  --wine: ##ff6f91;
+  --wine-soft: #ff6f91;
   --gold: #ffc857;
   --urgent: #d6006f;
   --important: #ff6fb5;
@@ -800,7 +800,7 @@ input, select, textarea {
 
 .inspiration-btn.secondary {
   background: var(--watermelon);
-  color: var(--wine);
+  color: var(--watermelon);
   box-shadow: none;
 }
 
