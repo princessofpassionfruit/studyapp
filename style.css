@@ -715,38 +715,60 @@ input, select, textarea {
 
 .hidden { display: none !important; }
 
-/* =========================================================
+//* =========================================================
    DAILY INSPIRATION CARD
    ========================================================= */
 
 .inspiration-card {
   margin: 0 16px 30px;
   padding: 18px;
-  background: #ffffff;
+  background: #fff6f2;
   border-radius: 24px;
-  box-shadow: 0 8px 24px rgba(122, 58, 78, 0.12);
-  border: 1px solid rgba(255, 182, 193, 0.35);
+  border: 1px solid rgba(255, 182, 217, 0.7);
+  box-shadow: 0 8px 24px rgba(255, 111, 145, 0.12);
+  overflow: hidden;
 }
 
-.inspiration-header {
+
+/* =========================================================
+   CLEAN DISPLAY MODE
+   ========================================================= */
+
+.inspiration-display {
+  display: block;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.inspiration-display-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
   margin-bottom: 14px;
 }
 
-.inspiration-header h2 {
-  margin: 0 0 4px;
-  color: var(--hot-pink);
+.inspiration-display-header h2 {
+  margin: 0;
+  color: #ff2e93;
   font-size: 20px;
   line-height: 1.2;
 }
 
-.inspiration-header p {
-  margin: 0;
-  color: #9a6877;
-  font-size: 13px;
-  line-height: 1.4;
+.inspiration-edit-hint {
+  flex-shrink: 0;
+  padding: 5px 9px;
+  border-radius: 999px;
+  background: #ffb6d9;
+  color: #ff2e93;
+  font-size: 10px;
+  font-weight: 700;
 }
 
-/* Photo */
+
+/* =========================================================
+   PHOTO
+   ========================================================= */
 
 .inspiration-photo-wrap {
   position: relative;
@@ -754,8 +776,8 @@ input, select, textarea {
   aspect-ratio: 4 / 3;
   overflow: hidden;
   border-radius: 18px;
-  background: var(--watermelon);
-  border: 2px dashed rgba(255, 105, 135, 0.35);
+  background: #ffb6d9;
+  border: 2px solid rgba(255, 111, 145, 0.25);
 }
 
 .inspiration-placeholder {
@@ -766,9 +788,9 @@ input, select, textarea {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  color: var(--wine);
+  color: #ff2e93;
   font-size: 15px;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .inspiration-placeholder-icon {
@@ -782,7 +804,92 @@ input, select, textarea {
   object-fit: cover;
 }
 
-/* Photo buttons */
+
+/* =========================================================
+   QUOTE DISPLAY
+   ========================================================= */
+
+.inspiration-quote-display {
+  margin: 16px 4px 2px;
+  color: #ff2e93;
+  font-size: 17px;
+  line-height: 1.5;
+  font-weight: 600;
+  font-style: italic;
+  text-align: center;
+  word-break: break-word;
+}
+
+.inspiration-quote-display.empty {
+  color: #c98fa9;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+
+/* =========================================================
+   EDITOR
+   ========================================================= */
+
+.inspiration-editor {
+  display: none;
+}
+
+.inspiration-card.editing .inspiration-display {
+  display: none;
+}
+
+.inspiration-card.editing .inspiration-editor {
+  display: block;
+}
+
+.inspiration-editor-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.inspiration-editor-header h2 {
+  margin: 0 0 4px;
+  color: #ff2e93;
+  font-size: 20px;
+}
+
+.inspiration-editor-header p {
+  margin: 0;
+  color: #b4778e;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+
+/* =========================================================
+   DONE BUTTON
+   ========================================================= */
+
+.inspiration-done-btn {
+  flex-shrink: 0;
+  padding: 8px 13px;
+  border: none;
+  border-radius: 999px;
+  background: #ff2e93;
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.inspiration-done-btn:active {
+  transform: scale(0.97);
+}
+
+
+/* =========================================================
+   EDIT PHOTO BUTTONS
+   ========================================================= */
 
 .inspiration-actions {
   display: flex;
@@ -796,13 +903,13 @@ input, select, textarea {
   padding: 10px 12px;
   border: none;
   border-radius: 14px;
-  background: var(--hot-pink);
+  background: #ff6f91;
   color: #ffffff;
   font-family: inherit;
   font-size: 13px;
   font-weight: 700;
   cursor: pointer;
-  box-shadow: 0 4px 10px rgba(255, 77, 109, 0.18);
+  box-shadow: 0 4px 10px rgba(255, 111, 145, 0.16);
 }
 
 .inspiration-btn:active {
@@ -810,17 +917,20 @@ input, select, textarea {
 }
 
 .inspiration-btn.secondary {
-  background: var(--watermelon);
-  color: var(--watermelon);
+  background: #ffd9c0;
+  color: #ff2e93;
   box-shadow: none;
 }
 
-/* Quote */
+
+/* =========================================================
+   QUOTE EDITOR
+   ========================================================= */
 
 .inspiration-quote-label {
   display: block;
   margin: 17px 0 7px;
-  color: var(--hot-pink);
+  color: #ff2e93;
   font-size: 13px;
   font-weight: 700;
 }
@@ -832,10 +942,10 @@ input, select, textarea {
   box-sizing: border-box;
   padding: 12px 13px;
   resize: vertical;
-  border: 1px solid rgba(255, 105, 135, 0.3);
+  border: 1px solid rgba(255, 111, 145, 0.3);
   border-radius: 15px;
-  background: #fffaf7;
-  color: var(--hot-pink);
+  background: #ffffff;
+  color: #ff2e93;
   font-family: inherit;
   font-size: 15px;
   line-height: 1.45;
@@ -847,11 +957,14 @@ input, select, textarea {
 }
 
 .inspiration-quote:focus {
-  border-color: var(--watermelon);
-  box-shadow: 0 0 0 3px rgba(255, 105, 135, 0.1);
+  border-color: #ff6f91;
+  box-shadow: 0 0 0 3px rgba(255, 111, 145, 0.1);
 }
 
-/* Save button */
+
+/* =========================================================
+   SAVE QUOTE
+   ========================================================= */
 
 .inspiration-save-btn {
   width: 100%;
@@ -859,7 +972,7 @@ input, select, textarea {
   margin-top: 10px;
   border: none;
   border-radius: 15px;
-  background: var(--hot-pink);
+  background: #ff2e93;
   color: #ffffff;
   font-family: inherit;
   font-size: 14px;
@@ -871,13 +984,16 @@ input, select, textarea {
   transform: scale(0.98);
 }
 
-/* Small saved message */
+
+/* =========================================================
+   STATUS MESSAGE
+   ========================================================= */
 
 .inspiration-status {
   min-height: 16px;
   margin: 7px 0 0;
   text-align: center;
-  color: var(--watermelon);
+  color: #ff6f91;
   font-size: 12px;
   font-weight: 600;
 }
