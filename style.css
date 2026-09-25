@@ -823,7 +823,7 @@ input, select, textarea {
   resize: vertical;
   border: 1px solid rgba(255, 105, 135, 0.3);
   border-radius: 15px;
-  background: #ff6f91;
+  background: #ffd9c0;
   color: var(--hot-pink);
   font-family: inherit;
   font-size: 15px;
@@ -832,7 +832,7 @@ input, select, textarea {
 }
 
 .inspiration-quote::placeholder {
-  color: #ff6f91;
+  color: #ff6f91; 
 }
 
 .inspiration-quote:focus {
