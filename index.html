@@ -41,6 +41,79 @@
         <span class="label">Weekly Schedule</span>
       </button>
     </div>
+        <!-- Daily Inspiration -->
+    <div class="inspiration-card" id="inspiration-card">
+      <div class="inspiration-header">
+        <div>
+          <h2>Daily Inspiration 💕</h2>
+          <p>Add a photo and a quote to brighten your dashboard.</p>
+        </div>
+      </div>
+
+      <!-- Photo area -->
+      <div class="inspiration-photo-wrap" id="inspiration-photo-wrap">
+        <div class="inspiration-placeholder" id="inspiration-placeholder">
+          <span class="inspiration-placeholder-icon">📷</span>
+          <span>Add a photo</span>
+        </div>
+
+        <img
+          id="inspiration-photo"
+          class="inspiration-photo"
+          alt="Your inspiration"
+        />
+      </div>
+
+      <!-- Hidden iPhone photo picker -->
+      <input
+        type="file"
+        id="inspiration-photo-input"
+        accept="image/*"
+        hidden
+      />
+
+      <div class="inspiration-actions">
+        <button
+          type="button"
+          class="inspiration-btn"
+          id="inspiration-photo-btn"
+        >
+          📷 Choose Photo
+        </button>
+
+        <button
+          type="button"
+          class="inspiration-btn secondary"
+          id="inspiration-remove-photo-btn"
+          hidden
+        >
+          Remove Photo
+        </button>
+      </div>
+
+      <!-- Quote -->
+      <label class="inspiration-quote-label" for="inspiration-quote">
+        Your quote
+      </label>
+
+      <textarea
+        id="inspiration-quote"
+        class="inspiration-quote"
+        rows="3"
+        maxlength="250"
+        placeholder="you're the best of the best"
+      ></textarea>
+
+      <button
+        type="button"
+        class="inspiration-save-btn"
+        id="inspiration-save-btn"
+      >
+        🩰 Save Quote
+      </button>
+
+      <p class="inspiration-status" id="inspiration-status"></p>
+    </div>
   </section>
 
   <!-- ============ GRADES ============ -->
