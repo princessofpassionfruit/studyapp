@@ -703,3 +703,170 @@ input, select, textarea {
 ::-webkit-scrollbar { width: 0; height: 0; }
 
 .hidden { display: none !important; }
+
+/* =========================================================
+   DAILY INSPIRATION CARD
+   ========================================================= */
+
+.inspiration-card {
+  margin: 0 16px 30px;
+  padding: 18px;
+  background: #ffffff;
+  border-radius: 24px;
+  box-shadow: 0 8px 24px rgba(122, 58, 78, 0.12);
+  border: 1px solid rgba(255, 182, 193, 0.35);
+}
+
+.inspiration-header {
+  margin-bottom: 14px;
+}
+
+.inspiration-header h2 {
+  margin: 0 0 4px;
+  color: var(--wine);
+  font-size: 20px;
+  line-height: 1.2;
+}
+
+.inspiration-header p {
+  margin: 0;
+  color: #9a6877;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+/* Photo */
+
+.inspiration-photo-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: 18px;
+  background: var(--peach-soft);
+  border: 2px dashed rgba(255, 105, 135, 0.35);
+}
+
+.inspiration-placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: var(--wine);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.inspiration-placeholder-icon {
+  font-size: 42px;
+}
+
+.inspiration-photo {
+  display: none;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Photo buttons */
+
+.inspiration-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.inspiration-btn {
+  flex: 1;
+  min-height: 44px;
+  padding: 10px 12px;
+  border: none;
+  border-radius: 14px;
+  background: var(--hot-pink);
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(255, 77, 109, 0.18);
+}
+
+.inspiration-btn:active {
+  transform: scale(0.98);
+}
+
+.inspiration-btn.secondary {
+  background: var(--peach-soft);
+  color: var(--wine);
+  box-shadow: none;
+}
+
+/* Quote */
+
+.inspiration-quote-label {
+  display: block;
+  margin: 17px 0 7px;
+  color: var(--wine);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.inspiration-quote {
+  display: block;
+  width: 100%;
+  min-height: 82px;
+  box-sizing: border-box;
+  padding: 12px 13px;
+  resize: vertical;
+  border: 1px solid rgba(255, 105, 135, 0.3);
+  border-radius: 15px;
+  background: #fffaf7;
+  color: var(--wine);
+  font-family: inherit;
+  font-size: 15px;
+  line-height: 1.45;
+  outline: none;
+}
+
+.inspiration-quote::placeholder {
+  color: #c49aa7;
+}
+
+.inspiration-quote:focus {
+  border-color: var(--watermelon);
+  box-shadow: 0 0 0 3px rgba(255, 105, 135, 0.1);
+}
+
+/* Save button */
+
+.inspiration-save-btn {
+  width: 100%;
+  min-height: 46px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 15px;
+  background: var(--hot-pink);
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.inspiration-save-btn:active {
+  transform: scale(0.98);
+}
+
+/* Small saved message */
+
+.inspiration-status {
+  min-height: 16px;
+  margin: 7px 0 0;
+  text-align: center;
+  color: var(--watermelon);
+  font-size: 12px;
+  font-weight: 600;
+}
