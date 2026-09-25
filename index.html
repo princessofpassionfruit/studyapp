@@ -42,80 +42,125 @@
       </button>
     </div>
         <!-- Daily Inspiration -->
-    <div class="inspiration-card" id="inspiration-card">
-      <div class="inspiration-header">
-        <div>
-          <h2>Daily Inspiration 💕</h2>
-          <p>Add a photo and a quote to brighten your dashboard.</p>
-        </div>
+<div class="inspiration-card" id="inspiration-card">
+
+  <!-- Clean display mode -->
+  <div class="inspiration-display" id="inspiration-display">
+
+    <div class="inspiration-display-header">
+      <h2>Daily Inspiration 💕</h2>
+      <span class="inspiration-edit-hint">Tap to edit</span>
+    </div>
+
+    <div class="inspiration-photo-wrap" id="inspiration-photo-wrap">
+
+      <div class="inspiration-placeholder" id="inspiration-placeholder">
+        <span class="inspiration-placeholder-icon">📷</span>
+        <span>Add a photo</span>
       </div>
 
-      <!-- Photo area -->
-      <div class="inspiration-photo-wrap" id="inspiration-photo-wrap">
-        <div class="inspiration-placeholder" id="inspiration-placeholder">
-          <span class="inspiration-placeholder-icon">📷</span>
-          <span>Add a photo</span>
-        </div>
-
-        <img
-          id="inspiration-photo"
-          class="inspiration-photo"
-          alt="Your inspiration"
-        />
-      </div>
-
-      <!-- Hidden iPhone photo picker -->
-      <input
-        type="file"
-        id="inspiration-photo-input"
-        accept="image/*"
-        hidden
+      <img
+        id="inspiration-photo"
+        class="inspiration-photo"
+        alt="Your inspiration"
       />
 
-      <div class="inspiration-actions">
-        <button
-          type="button"
-          class="inspiration-btn"
-          id="inspiration-photo-btn"
-        >
-          📷 Choose Photo
-        </button>
+    </div>
 
-        <button
-          type="button"
-          class="inspiration-btn secondary"
-          id="inspiration-remove-photo-btn"
-          hidden
-        >
-          Remove Photo
-        </button>
+    <div
+      class="inspiration-quote-display"
+      id="inspiration-quote-display"
+    >
+      “you're the best of the best”
+    </div>
+
+  </div>
+
+
+  <!-- Editing mode -->
+  <div class="inspiration-editor" id="inspiration-editor">
+
+    <div class="inspiration-editor-header">
+      <div>
+        <h2>Edit Inspiration ✨</h2>
+        <p>Make your little corner of the dashboard yours.</p>
       </div>
-
-      <!-- Quote -->
-      <label class="inspiration-quote-label" for="inspiration-quote">
-        Your quote
-      </label>
-
-      <textarea
-        id="inspiration-quote"
-        class="inspiration-quote"
-        rows="3"
-        maxlength="250"
-        placeholder="you're the best of the best"
-      ></textarea>
 
       <button
         type="button"
-        class="inspiration-save-btn"
-        id="inspiration-save-btn"
+        class="inspiration-done-btn"
+        id="inspiration-done-btn"
       >
-        🩰 Save Quote
+        Done
+      </button>
+    </div>
+
+
+    <!-- Hidden iPhone photo picker -->
+    <input
+      type="file"
+      id="inspiration-photo-input"
+      accept="image/*"
+      hidden
+    />
+
+
+    <!-- Photo controls -->
+    <div class="inspiration-actions">
+
+      <button
+        type="button"
+        class="inspiration-btn"
+        id="inspiration-photo-btn"
+      >
+        📷 Change Photo
       </button>
 
-      <p class="inspiration-status" id="inspiration-status"></p>
-    </div>
-  </section>
+      <button
+        type="button"
+        class="inspiration-btn secondary"
+        id="inspiration-remove-photo-btn"
+        hidden
+      >
+        Remove
+      </button>
 
+    </div>
+
+
+    <!-- Quote editor -->
+    <label
+      class="inspiration-quote-label"
+      for="inspiration-quote"
+    >
+      Your quote
+    </label>
+
+    <textarea
+      id="inspiration-quote"
+      class="inspiration-quote"
+      rows="3"
+      maxlength="250"
+      placeholder="you're the best of the best"
+    ></textarea>
+
+
+    <button
+      type="button"
+      class="inspiration-save-btn"
+      id="inspiration-save-btn"
+    >
+      Save Quote 💗
+    </button>
+
+    <p
+      class="inspiration-status"
+      id="inspiration-status"
+    ></p>
+
+  </div>
+
+  </section>
   <!-- ============ GRADES ============ -->
   <section id="screen-grades" class="screen">
     <div class="topbar">
