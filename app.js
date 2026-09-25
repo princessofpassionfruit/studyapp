@@ -14,7 +14,11 @@ function defaultState() {
   return {
     subjects: [],
     tasks: [],
-    schedule: []
+    schedule: [],
+    inspiration: {
+      image: "",
+      quote: ""
+    }
   };
 }
 
@@ -723,11 +727,242 @@ function init() {
   renderGrades();
   renderCalendar();
   renderSchedule();
+   setupInspiration();
   setInterval(renderBanner, 60000); // refresh every minute
 
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("sw.js").catch(() => {});
   }
 }
+/* =========================================================
+   DAILY INSPIRATION
+   ========================================================= */
 
+function renderInspiration() {
+  const photo = document.getElementById("inspiration-photo");
+  const placeholder = document.getElementById("inspiration-placeholder");
+  const quote = document.getElementById("inspiration-quote");
+  const removePhotoBtn = document.getElementById(
+    "inspiration-remove-photo-btn"
+  );
+
+  if (!photo || !placeholder || !quote) return;
+
+  // Make sure older saved data gets the new inspiration object.
+  if (!state.inspiration) {
+    state.inspiration = {
+      image: "",
+      quote: ""
+    };
+  }
+
+  // Load saved quote.
+  quote.value = state.inspiration.quote || "";
+
+  // Load saved photo.
+  if (state.inspiration.image) {
+    photo.src = state.inspiration.image;
+    photo.style.display = "block";
+    placeholder.style.display = "none";
+
+    if (removePhotoBtn) {
+      removePhotoBtn.hidden = false;
+    }
+  } else {
+    photo.removeAttribute("src");
+    photo.style.display = "none";
+    placeholder.style.display = "flex";
+
+    if (removePhotoBtn) {
+      removePhotoBtn.hidden = true;
+    }
+  }
+}
+
+
+function setupInspiration() {
+  const photoInput = document.getElementById("inspiration-photo-input");
+  const photoBtn = document.getElementById("inspiration-photo-btn");
+  const removePhotoBtn = document.getElementById(
+    "inspiration-remove-photo-btn"
+  );
+  const saveQuoteBtn = document.getElementById("inspiration-save-btn");
+  const quoteInput = document.getElementById("inspiration-quote");
+  const status = document.getElementById("inspiration-status");
+
+  if (!photoInput || !photoBtn || !saveQuoteBtn) return;
+
+  /*
+   * Make sure inspiration exists even if the app was installed
+   * before this feature was added.
+   */
+  if (!state.inspiration) {
+    state.inspiration = {
+      image: "",
+      quote: ""
+    };
+    saveState();
+  }
+
+  /*
+   * Choose Photo
+   *
+   * On iPhone, accept="image/*" opens the normal photo/media
+   * picker, allowing the user to choose an image from Photos.
+   */
+  photoBtn.addEventListener("click", () => {
+    photoInput.click();
+  });
+
+
+  /*
+   * Photo selected
+   *
+   * The original iPhone photo can be very large, so we resize
+   * it before saving. This prevents localStorage from filling
+   * up with a huge original camera image.
+   */
+  photoInput.addEventListener("change", (event) => {
+    const file = event.target.files && event.target.files[0];
+
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      if (status) {
+        status.textContent = "Please choose an image.";
+      }
+      return;
+    }
+
+    const objectUrl = URL.createObjectURL(file);
+    const image = new Image();
+
+    image.onload = () => {
+      try {
+        const MAX_SIZE = 1200;
+
+        let width = image.naturalWidth;
+        let height = image.naturalHeight;
+
+        /*
+         * Keep the original aspect ratio while reducing the
+         * longest side to 1200px.
+         */
+        if (width > MAX_SIZE || height > MAX_SIZE) {
+          if (width > height) {
+            height = Math.round((height / width) * MAX_SIZE);
+            width = MAX_SIZE;
+          } else {
+            width = Math.round((width / height) * MAX_SIZE);
+            height = MAX_SIZE;
+          }
+        }
+
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+
+        const context = canvas.getContext("2d");
+
+        if (!context) {
+          throw new Error("Could not create image canvas.");
+        }
+
+        context.drawImage(image, 0, 0, width, height);
+
+        /*
+         * JPEG compression dramatically reduces the amount of
+         * storage required compared with the original iPhone
+         * image.
+         */
+        const compressedImage = canvas.toDataURL(
+          "image/jpeg",
+          0.82
+        );
+
+        state.inspiration.image = compressedImage;
+
+        saveState();
+        renderInspiration();
+
+        if (status) {
+          status.textContent = "Photo saved 💕";
+        }
+      } catch (error) {
+        console.error("Could not process inspiration photo:", error);
+
+        if (status) {
+          status.textContent =
+            "Sorry, that photo could not be added.";
+        }
+      } finally {
+        URL.revokeObjectURL(objectUrl);
+      }
+    };
+
+    image.onerror = () => {
+      URL.revokeObjectURL(objectUrl);
+
+      if (status) {
+        status.textContent =
+          "Sorry, that photo could not be opened.";
+      }
+    };
+
+    image.src = objectUrl;
+
+    // Allow the same photo to be selected again later.
+    photoInput.value = "";
+  });
+
+
+  /*
+   * Remove Photo
+   */
+  if (removePhotoBtn) {
+    removePhotoBtn.addEventListener("click", () => {
+      state.inspiration.image = "";
+
+      saveState();
+      renderInspiration();
+
+      if (status) {
+        status.textContent = "Photo removed.";
+      }
+    });
+  }
+
+
+  /*
+   * Save Quote
+   */
+  saveQuoteBtn.addEventListener("click", () => {
+    state.inspiration.quote = quoteInput.value.trim();
+
+    saveState();
+
+    if (status) {
+      status.textContent = "Quote saved 💗";
+
+      window.setTimeout(() => {
+        if (status.textContent === "Quote saved 💗") {
+          status.textContent = "";
+        }
+      }, 2000);
+    }
+  });
+
+
+  /*
+   * Clear the little status message when the user starts
+   * editing the quote again.
+   */
+  quoteInput.addEventListener("input", () => {
+    if (status) {
+      status.textContent = "";
+    }
+  });
+
+  renderInspiration();
+}
 init();
