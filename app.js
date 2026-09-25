@@ -754,33 +754,61 @@ function init() {
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("sw.js").catch(() => {});
   }
-}
-/* =========================================================
+}/* =========================================================
    DAILY INSPIRATION
    ========================================================= */
 
 function renderInspiration() {
+  const card = document.getElementById("inspiration-card");
   const photo = document.getElementById("inspiration-photo");
   const placeholder = document.getElementById("inspiration-placeholder");
-  const quote = document.getElementById("inspiration-quote");
+  const quoteInput = document.getElementById("inspiration-quote");
+  const quoteDisplay = document.getElementById(
+    "inspiration-quote-display"
+  );
   const removePhotoBtn = document.getElementById(
     "inspiration-remove-photo-btn"
   );
 
-  if (!photo || !placeholder || !quote) return;
+  if (!card || !photo || !placeholder || !quoteInput || !quoteDisplay) {
+    return;
+  }
 
-  // Make sure older saved data gets the new inspiration object.
+  /*
+   * Make sure older saved data gets the inspiration object.
+   */
   if (!state.inspiration) {
     state.inspiration = {
       image: "",
       quote: ""
     };
+
+    saveState();
   }
 
-  // Load saved quote.
-  quote.value = state.inspiration.quote || "";
+  /*
+   * Load saved quote into the editor.
+   */
+  quoteInput.value = state.inspiration.quote || "";
 
-  // Load saved photo.
+  /*
+   * Display the saved quote on the clean dashboard card.
+   */
+  if (state.inspiration.quote) {
+    quoteDisplay.textContent =
+      `“${state.inspiration.quote}”`;
+
+    quoteDisplay.classList.remove("empty");
+  } else {
+    quoteDisplay.textContent =
+      "Tap to add your favourite quote 💕";
+
+    quoteDisplay.classList.add("empty");
+  }
+
+  /*
+   * Load saved photo.
+   */
   if (state.inspiration.image) {
     photo.src = state.inspiration.image;
     photo.style.display = "block";
@@ -802,56 +830,114 @@ function renderInspiration() {
 
 
 function setupInspiration() {
-  const photoInput = document.getElementById("inspiration-photo-input");
-  const photoBtn = document.getElementById("inspiration-photo-btn");
+  const card = document.getElementById("inspiration-card");
+  const display = document.getElementById("inspiration-display");
+  const doneBtn = document.getElementById(
+    "inspiration-done-btn"
+  );
+
+  const photoInput = document.getElementById(
+    "inspiration-photo-input"
+  );
+
+  const photoBtn = document.getElementById(
+    "inspiration-photo-btn"
+  );
+
   const removePhotoBtn = document.getElementById(
     "inspiration-remove-photo-btn"
   );
-  const saveQuoteBtn = document.getElementById("inspiration-save-btn");
-  const quoteInput = document.getElementById("inspiration-quote");
-  const status = document.getElementById("inspiration-status");
 
-  if (!photoInput || !photoBtn || !saveQuoteBtn) return;
+  const saveQuoteBtn = document.getElementById(
+    "inspiration-save-btn"
+  );
+
+  const quoteInput = document.getElementById(
+    "inspiration-quote"
+  );
+
+  const status = document.getElementById(
+    "inspiration-status"
+  );
+
+  if (
+    !card ||
+    !display ||
+    !doneBtn ||
+    !photoInput ||
+    !photoBtn ||
+    !saveQuoteBtn ||
+    !quoteInput
+  ) {
+    return;
+  }
+
 
   /*
-   * Make sure inspiration exists even if the app was installed
-   * before this feature was added.
+   * Make sure inspiration exists.
    */
   if (!state.inspiration) {
     state.inspiration = {
       image: "",
       quote: ""
     };
+
     saveState();
   }
 
+
   /*
-   * Choose Photo
-   *
-   * On iPhone, accept="image/*" opens the normal photo/media
-   * picker, allowing the user to choose an image from Photos.
+   * Open editor by tapping the clean card.
    */
-  photoBtn.addEventListener("click", () => {
+  display.addEventListener("click", () => {
+    card.classList.add("editing");
+
+    window.setTimeout(() => {
+      quoteInput.focus();
+    }, 50);
+  });
+
+
+  /*
+   * Done button returns to the clean card.
+   */
+  doneBtn.addEventListener("click", (event) => {
+    event.stopPropagation();
+
+    card.classList.remove("editing");
+
+    if (status) {
+      status.textContent = "";
+    }
+
+    renderInspiration();
+  });
+
+
+  /*
+   * Change Photo.
+   */
+  photoBtn.addEventListener("click", (event) => {
+    event.stopPropagation();
     photoInput.click();
   });
 
 
   /*
-   * Photo selected
-   *
-   * The original iPhone photo can be very large, so we resize
-   * it before saving. This prevents localStorage from filling
-   * up with a huge original camera image.
+   * Photo selected.
    */
   photoInput.addEventListener("change", (event) => {
-    const file = event.target.files && event.target.files[0];
+    const file =
+      event.target.files && event.target.files[0];
 
     if (!file) return;
 
     if (!file.type.startsWith("image/")) {
       if (status) {
-        status.textContent = "Please choose an image.";
+        status.textContent =
+          "Please choose an image.";
       }
+
       return;
     }
 
@@ -866,60 +952,92 @@ function setupInspiration() {
         let height = image.naturalHeight;
 
         /*
-         * Keep the original aspect ratio while reducing the
-         * longest side to 1200px.
+         * Keep the original aspect ratio.
          */
         if (width > MAX_SIZE || height > MAX_SIZE) {
           if (width > height) {
-            height = Math.round((height / width) * MAX_SIZE);
+            height = Math.round(
+              (height / width) * MAX_SIZE
+            );
+
             width = MAX_SIZE;
           } else {
-            width = Math.round((width / height) * MAX_SIZE);
+            width = Math.round(
+              (width / height) * MAX_SIZE
+            );
+
             height = MAX_SIZE;
           }
         }
 
-        const canvas = document.createElement("canvas");
+        const canvas =
+          document.createElement("canvas");
+
         canvas.width = width;
         canvas.height = height;
 
-        const context = canvas.getContext("2d");
+        const context =
+          canvas.getContext("2d");
 
         if (!context) {
-          throw new Error("Could not create image canvas.");
+          throw new Error(
+            "Could not create image canvas."
+          );
         }
 
-        context.drawImage(image, 0, 0, width, height);
-
-        /*
-         * JPEG compression dramatically reduces the amount of
-         * storage required compared with the original iPhone
-         * image.
-         */
-        const compressedImage = canvas.toDataURL(
-          "image/jpeg",
-          0.82
+        context.drawImage(
+          image,
+          0,
+          0,
+          width,
+          height
         );
 
-        state.inspiration.image = compressedImage;
+        /*
+         * Compress the photo before saving.
+         */
+        const compressedImage =
+          canvas.toDataURL(
+            "image/jpeg",
+            0.82
+          );
+
+        state.inspiration.image =
+          compressedImage;
 
         saveState();
         renderInspiration();
 
         if (status) {
-          status.textContent = "Photo saved 💕";
+          status.textContent =
+            "Photo saved 💕";
+
+          window.setTimeout(() => {
+            if (
+              status.textContent ===
+              "Photo saved 💕"
+            ) {
+              status.textContent = "";
+            }
+          }, 1800);
         }
+
       } catch (error) {
-        console.error("Could not process inspiration photo:", error);
+        console.error(
+          "Could not process inspiration photo:",
+          error
+        );
 
         if (status) {
           status.textContent =
             "Sorry, that photo could not be added.";
         }
+
       } finally {
         URL.revokeObjectURL(objectUrl);
       }
     };
+
 
     image.onerror = () => {
       URL.revokeObjectURL(objectUrl);
@@ -930,59 +1048,97 @@ function setupInspiration() {
       }
     };
 
+
     image.src = objectUrl;
 
-    // Allow the same photo to be selected again later.
+    /*
+     * Allows the same photo to be selected again.
+     */
     photoInput.value = "";
   });
 
 
   /*
-   * Remove Photo
+   * Remove Photo.
    */
   if (removePhotoBtn) {
-    removePhotoBtn.addEventListener("click", () => {
-      state.inspiration.image = "";
+    removePhotoBtn.addEventListener(
+      "click",
+      (event) => {
+        event.stopPropagation();
+
+        state.inspiration.image = "";
+
+        saveState();
+        renderInspiration();
+
+        if (status) {
+          status.textContent =
+            "Photo removed.";
+
+          window.setTimeout(() => {
+            if (
+              status.textContent ===
+              "Photo removed."
+            ) {
+              status.textContent = "";
+            }
+          }, 1800);
+        }
+      }
+    );
+  }
+
+
+  /*
+   * Save Quote.
+   */
+  saveQuoteBtn.addEventListener(
+    "click",
+    (event) => {
+      event.stopPropagation();
+
+      state.inspiration.quote =
+        quoteInput.value.trim();
 
       saveState();
       renderInspiration();
 
       if (status) {
-        status.textContent = "Photo removed.";
+        status.textContent =
+          "Quote saved 💗";
+
+        window.setTimeout(() => {
+          if (
+            status.textContent ===
+            "Quote saved 💗"
+          ) {
+            status.textContent = "";
+          }
+        }, 1800);
       }
-    });
+    }
+  );
+
+
+  /*
+   * Don't let clicks inside the editor
+   * accidentally trigger anything else.
+   */
+  const editor =
+    document.getElementById(
+      "inspiration-editor"
+    );
+
+  if (editor) {
+    editor.addEventListener(
+      "click",
+      (event) => {
+        event.stopPropagation();
+      }
+    );
   }
 
-
-  /*
-   * Save Quote
-   */
-  saveQuoteBtn.addEventListener("click", () => {
-    state.inspiration.quote = quoteInput.value.trim();
-
-    saveState();
-
-    if (status) {
-      status.textContent = "Quote saved 💗";
-
-      window.setTimeout(() => {
-        if (status.textContent === "Quote saved 💗") {
-          status.textContent = "";
-        }
-      }, 2000);
-    }
-  });
-
-
-  /*
-   * Clear the little status message when the user starts
-   * editing the quote again.
-   */
-  quoteInput.addEventListener("input", () => {
-    if (status) {
-      status.textContent = "";
-    }
-  });
 
   renderInspiration();
 }
