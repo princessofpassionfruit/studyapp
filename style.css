@@ -723,7 +723,7 @@ input, select, textarea {
 
 .inspiration-header h2 {
   margin: 0 0 4px;
-  color: var(--wine);
+  color: var(--hot-pink);
   font-size: 20px;
   line-height: 1.2;
 }
@@ -743,7 +743,7 @@ input, select, textarea {
   aspect-ratio: 4 / 3;
   overflow: hidden;
   border-radius: 18px;
-  background: var(--peach-soft);
+  background: var(--watermelon);
   border: 2px dashed rgba(255, 105, 135, 0.35);
 }
 
@@ -799,7 +799,7 @@ input, select, textarea {
 }
 
 .inspiration-btn.secondary {
-  background: var(--peach-soft);
+  background: var(--watermelon);
   color: var(--wine);
   box-shadow: none;
 }
@@ -809,7 +809,7 @@ input, select, textarea {
 .inspiration-quote-label {
   display: block;
   margin: 17px 0 7px;
-  color: var(--wine);
+  color: var(--hot-pink);
   font-size: 13px;
   font-weight: 700;
 }
@@ -824,7 +824,7 @@ input, select, textarea {
   border: 1px solid rgba(255, 105, 135, 0.3);
   border-radius: 15px;
   background: #fffaf7;
-  color: var(--wine);
+  color: var(--hot-pink);
   font-family: inherit;
   font-size: 15px;
   line-height: 1.45;
