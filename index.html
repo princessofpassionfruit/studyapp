@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Miraaya's School Planner</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#ff6f91">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="School Planner">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+
+  <!-- ============ DASHBOARD ============ -->
+  <section id="screen-dashboard" class="screen active">
+    <div class="topbar">
+      <h1>Miraaya's School Planner 💕</h1>
+    </div>
+
+    <div class="banner" id="dash-banner">
+      <div class="banner-row"><span class="emoji">⏰</span><span id="banner-next-task">Loading your next task...</span></div>
+      <div class="banner-row"><span class="emoji">📍</span><span id="banner-current-class">Loading your schedule...</span></div>
+    </div>
+
+    <div class="dashboard-grid">
+      <button class="big-btn" data-nav="grades">
+        <span class="icon">💗</span>
+        <span class="label">Grades</span>
+      </button>
+      <button class="big-btn" data-nav="calendar">
+        <span class="icon">🗓️</span>
+        <span class="label">Calendar</span>
+      </button>
+      <button class="big-btn full" data-nav="schedule">
+        <span class="icon">🌷</span>
+        <span class="label">Weekly Schedule</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- ============ GRADES ============ -->
+  <section id="screen-grades" class="screen">
+    <div class="topbar">
+      <button class="back-btn" data-nav="dashboard">‹</button>
+      <div class="page-title">My Grades 🍑</div>
+    </div>
+
+    <div class="filter-bar">
+      <select id="mp-filter">
+        <option value="all">All Year</option>
+        <option value="1">Marking Period 1</option>
+        <option value="2">Marking Period 2</option>
+        <option value="3">Marking Period 3</option>
+        <option value="4">Marking Period 4</option>
+      </select>
+      <button class="pill-btn small" id="add-subject-btn">+ Subject</button>
+    </div>
+
+    <div class="scroll-area" id="subjects-list"></div>
+  </section>
+
+  <!-- ============ CALENDAR ============ -->
+  <section id="screen-calendar" class="screen">
+    <div class="topbar">
+      <button class="back-btn" data-nav="dashboard">‹</button>
+      <div class="page-title">Calendar 🍉</div>
+    </div>
+
+    <div class="segmented">
+      <button data-calview="month" class="active">Month</button>
+      <button data-calview="week">Week</button>
+      <button data-calview="day">Today</button>
+    </div>
+
+    <div class="cal-nav">
+      <button id="cal-prev">‹</button>
+      <div class="cal-title" id="cal-title">Month</div>
+      <button id="cal-next">›</button>
+    </div>
+
+    <div class="scroll-area">
+      <div id="cal-month-view"></div>
+      <div id="cal-week-view" class="hidden"></div>
+      <div id="cal-day-view" class="hidden"></div>
+    </div>
+
+    <button class="fab" id="add-task-btn">+</button>
+  </section>
+
+  <!-- ============ SCHEDULE ============ -->
+  <section id="screen-schedule" class="screen">
+    <div class="topbar">
+      <button class="back-btn" data-nav="dashboard">‹</button>
+      <div class="page-title">Weekly Schedule 🌸</div>
+    </div>
+
+    <div class="day-tabs" id="sched-day-tabs"></div>
+
+    <div class="scroll-area" id="sched-blocks"></div>
+
+    <button class="fab" id="add-block-btn">+</button>
+  </section>
+
+  <!-- ============ BOTTOM NAV ============ -->
+  <nav class="bottom-nav">
+    <button class="nav-item active" data-nav="dashboard">
+      <span class="icon">🏠</span>Home
+    </button>
+    <button class="nav-item" data-nav="grades">
+      <span class="icon">💗</span>Grades
+    </button>
+    <button class="nav-item" data-nav="calendar">
+      <span class="icon">🗓️</span>Calendar
+    </button>
+    <button class="nav-item" data-nav="schedule">
+      <span class="icon">🌷</span>Schedule
+    </button>
+  </nav>
+
+  <!-- ============ MODAL: Add/Edit Subject ============ -->
+  <div class="modal-overlay" id="modal-subject">
+    <div class="modal-sheet">
+      <h2>New Subject 💌</h2>
+      <div class="field">
+        <label>Subject name</label>
+        <input type="text" id="subj-name" placeholder="e.g. Physics">
+      </div>
+      <div class="honors-toggle" style="margin-bottom:14px;">
+        <input type="checkbox" id="subj-honors">
+        <label for="subj-honors">Honors / AP weighting (5.0 scale)</label>
+      </div>
+      <div class="modal-actions">
+        <button class="pill-btn secondary" data-close="modal-subject">Cancel</button>
+        <button class="pill-btn" id="save-subject-btn">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ MODAL: Add Grade Entry ============ -->
+  <div class="modal-overlay" id="modal-entry">
+    <div class="modal-sheet">
+      <h2>Add Grade 🎀</h2>
+      <div class="field">
+        <label>Assignment name</label>
+        <input type="text" id="entry-name" placeholder="e.g. Unit 3 Quiz">
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>Score</label>
+          <input type="number" id="entry-score" placeholder="88" step="0.1">
+        </div>
+        <div class="field">
+          <label>Out of</label>
+          <input type="number" id="entry-max" placeholder="100" step="0.1" value="100">
+        </div>
+      </div>
+      <div class="field">
+        <label>Marking period</label>
+        <select id="entry-mp">
+          <option value="1">Marking Period 1</option>
+          <option value="2">Marking Period 2</option>
+          <option value="3">Marking Period 3</option>
+          <option value="4">Marking Period 4</option>
+        </select>
+      </div>
+      <div class="modal-actions">
+        <button class="pill-btn secondary" data-close="modal-entry">Cancel</button>
+        <button class="pill-btn" id="save-entry-btn">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ MODAL: Add/Edit Task ============ -->
+  <div class="modal-overlay" id="modal-task">
+    <div class="modal-sheet">
+      <h2>New Task 💖</h2>
+      <div class="field">
+        <label>Task name</label>
+        <input type="text" id="task-title" placeholder="e.g. Chem lab report">
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>Due date</label>
+          <input type="date" id="task-date">
+        </div>
+        <div class="field">
+          <label>Due time</label>
+          <input type="time" id="task-time">
+        </div>
+      </div>
+      <div class="field">
+        <label>Priority</label>
+        <div class="priority-choice">
+          <label class="opt-urgent"><input type="radio" name="task-priority" value="urgent"><span>Urgent</span></label>
+          <label class="opt-important"><input type="radio" name="task-priority" value="important"><span>Important</span></label>
+          <label class="opt-todo"><input type="radio" name="task-priority" value="todo" checked><span>To Do</span></label>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="pill-btn secondary" data-close="modal-task">Cancel</button>
+        <button class="pill-btn" id="save-task-btn">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ MODAL: Add/Edit Schedule Block ============ -->
+  <div class="modal-overlay" id="modal-block">
+    <div class="modal-sheet">
+      <h2>Schedule Block 🍬</h2>
+      <div class="field">
+        <label>Title</label>
+        <input type="text" id="block-title" placeholder="e.g. AP Physics">
+      </div>
+      <div class="field">
+        <label>Details (room, teacher, etc.)</label>
+        <input type="text" id="block-sub" placeholder="e.g. Room 204">
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>Start time</label>
+          <input type="time" id="block-start">
+        </div>
+        <div class="field">
+          <label>End time</label>
+          <input type="time" id="block-end">
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="pill-btn secondary" data-close="modal-block">Cancel</button>
+        <button class="pill-btn" id="save-block-btn">Save</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
