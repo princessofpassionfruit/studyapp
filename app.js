@@ -572,7 +572,8 @@ item.querySelector("[data-delete-task]").addEventListener("click", (e) => {
   }
 });
 
-return item;
+  return item;
+}
 
 function isSameDay(a, b) {
   return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
